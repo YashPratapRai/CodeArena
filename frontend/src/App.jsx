@@ -13,6 +13,13 @@ import AdminPanel from './Pages/AdminPanel';
 import Contest from './Pages/Contest';
 import Footer from './components/layout/Footer';
 import Discuss from './Pages/Discuss';
+import AboutUs from './Pages/Aboutus';
+import Careers from './Pages/Careers';
+import ContactUs from './Pages/ContactUs';
+import TermsOfService from './Pages/TermsOfService';
+import PrivacyPolicy from './Pages/PrivacyPolicy';
+// import SolutionsList from './components/SolutionsList';
+// import SolutionDetail from './components/SolutionDetail';
 // import SolutionsList from './components/SolutionsList';
 // import SolutionDetail from './components/SolutionDetail';
 
@@ -22,7 +29,6 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Routes>
-            {/* Home route with navbar */}
             <Route path="/" element={
               <>
                 <Navbar />
@@ -30,7 +36,6 @@ function App() {
               </>
             } />
             
-            {/* All other routes without navbar */}
             <Route path="/problems" element={<Problems />} />
             <Route path="/problems/:id" element={<ProblemDetail />} />
             <Route path="/profile" element={<Profile />} />
@@ -40,6 +45,11 @@ function App() {
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/contest" element={<Contest />} />
             <Route path="/discuss" element={<Discuss />} /> 
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             {/* <Route path="/problems/:problemId/solutions" element={<SolutionsList />} />
             <Route path="/solutions/:solutionId" element={<SolutionDetail />} /> */}
           </Routes>
