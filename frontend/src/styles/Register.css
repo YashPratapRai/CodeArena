@@ -1,0 +1,388 @@
+/* Register.css */
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: #1f2937;
+}
+
+/* Main container - full width, no gaps */
+.register-container {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Card styling */
+.register-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.register-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+}
+
+.register-header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.register-header h2 {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+
+.register-header p {
+  color: #666;
+  margin: 0;
+}
+
+/* Error message */
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Password input with toggle */
+.password-input {
+  position: relative;
+  width: 100%;
+}
+
+.password-input input {
+  padding-right: 4rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+}
+
+.password-toggle:hover {
+  color: #333;
+  background-color: #f0f0f0;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #5a67d8;
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Login link */
+.login-link {
+  text-align: center;
+  margin: 1.5rem 0 0.5rem;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.login-link a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Terms */
+.terms {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #999;
+  margin: 1rem 0 0;
+  line-height: 1.4;
+}
+
+.terms a {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .register-card {
+    max-width: 100%;
+    margin: 0 1rem;
+    padding: 1.5rem;
+  }
+  
+  .register-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .form-group input {
+    padding: 0.7rem;
+  }
+  
+  .password-toggle {
+    right: 0.25rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  .register-card {
+    margin: 0 0.5rem;
+    padding: 1rem;
+  }
+  
+  .register-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+}
+/* Add to your existing CSS files */
+
+/* Role Selector */
+.role-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background: #f8fafc;
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.role-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #64748b;
+}
+
+.role-btn.active {
+  background: white;
+  color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.role-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.5);
+  color: #4a5568;
+}
+
+.role-icon {
+  font-size: 1.2rem;
+}
+
+/* Demo Login Section */
+.demo-login {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.demo-title {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.demo-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.demo-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.demo-btn.user {
+  background: linear-gradient(135deg, #10b98120, #34d39920);
+  color: #10b981;
+  border: 1px solid #10b98140;
+}
+
+.demo-btn.user:hover {
+  background: linear-gradient(135deg, #10b98130, #34d39930);
+  transform: translateY(-2px);
+}
+
+.demo-btn.admin {
+  background: linear-gradient(135deg, #8b5cf620, #a78bfa20);
+  color: #8b5cf6;
+  border: 1px solid #8b5cf640;
+}
+
+.demo-btn.admin:hover {
+  background: linear-gradient(135deg, #8b5cf630, #a78bfa30);
+  transform: translateY(-2px);
+}
+
+.demo-icon {
+  font-size: 1.1rem;
+}
+
+/* Admin Secret Field */
+.admin-secret {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #8b5cf610, #a78bfa10);
+  border-radius: 8px;
+  border-left: 3px solid #8b5cf6;
+}
+
+.admin-icon {
+  margin-right: 0.5rem;
+}
+
+.secret-hint {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .role-selector {
+    flex-direction: column;
+  }
+  
+  .demo-buttons {
+    flex-direction: column;
+  }
+}
