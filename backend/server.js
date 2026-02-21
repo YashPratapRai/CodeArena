@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const solutionRoutes = require('./routes/solutionRoutes');
 require('dotenv').config();
 
 const connectDB = require('./config/db');
@@ -13,7 +14,6 @@ const problemRoutes = require('./routes/problems');
 const submissionRoutes = require('./routes/submissions');
 const userRoutes = require('./routes/users');
 const discussionRoutes = require('./routes/discussions');
-
 // Connect to database
 connectDB();
 
@@ -42,6 +42,7 @@ app.use('/api/problems', problemRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/discussions', discussionRoutes);
+app.use('/api/problems', solutionRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

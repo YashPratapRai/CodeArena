@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import problemService from '../services/problems';
+import SolutionViewModal from '../components/SolutionViewModal'; // Make sure to import this
 import '../styles/Problems.css';
 
 const Problems = () => {
@@ -17,6 +18,9 @@ const Problems = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [selectedTags, setSelectedTags] = useState([]);
   const [availableTags, setAvailableTags] = useState([]);
+  const [showSolutionModal, setShowSolutionModal] = useState(false);
+  const [selectedProblem, setSelectedProblem] = useState(null);
+  const [solutions, setSolutions] = useState({});
   const [stats, setStats] = useState({
     total: 0,
     easy: 0,
@@ -30,19 +34,47 @@ const Problems = () => {
   }, [filters]);
 
   const fetchProblems = async () => {
+  try {
+    setLoading(true);
+    const response = await problemService.getProblems(filters);
+    
+    // 🔴 FIX: Your API returns problems directly, not inside response.data.data
+    // The response structure might be different depending on your problemService
+    
+    console.log('API Response:', response); // Add this to debug
+    
+    // Try different possible structures
+    const problemsData = response.data?.problems || // Direct from API
+                        response.data?.data?.problems || // Nested structure
+                        response.data || // Just the array
+                        [];
+    
+    setProblems(problemsData);
+    setTotalPages(response.data?.totalPages || 1);
+    extractTags(problemsData);
+    calculateStats(problemsData);
+  } catch (error) {
+    console.error('Error fetching problems:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const handleViewSolution = async (problem) => {
     try {
-      setLoading(true);
-      const response = await problemService.getProblems(filters);
-      const problemsData = response.data.problems;
-      setProblems(problemsData);
-      setTotalPages(response.data.totalPages);
-      extractTags(problemsData);
-      
-      calculateStats(problemsData);
+      const response = await problemService.getSolution(problem._id);
+      if (response.data) {
+        setSelectedProblem(problem);
+        setSolutions(prev => ({
+          ...prev,
+          [problem._id]: response.data
+        }));
+        setShowSolutionModal(true);
+      }
     } catch (error) {
-      console.error('Error fetching problems:', error);
-    } finally {
-      setLoading(false);
+      console.error('Error fetching solution:', error);
+      // Optionally show an error message to the user
+      alert('Failed to load solution. Please try again.');
     }
   };
 
@@ -127,28 +159,27 @@ const Problems = () => {
 
   return (
     <div className="problems-container">
-
       <div className="problems-header">
-  <div className="header-content">
-    <div className="header-main">
-      <h1 className="header-title">Problem List</h1>
-      <Link to="/" className="home-button">
-        <svg className="home-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-        <span>Home</span>
-      </Link>
+        <div className="header-content">
+          <div className="header-main">
+            <h1 className="header-title">Problem List</h1>
+            <Link to="/" className="home-button">
+              <svg className="home-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span>Home</span>
+            </Link>
 
-      <button 
-        className="mobile-filter-toggle"
-        onClick={() => setShowMobileFilters(!showMobileFilters)}
-      >
-        <svg className="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
-        </svg>
-        Filters
-      </button>
-    </div>
+            <button 
+              className="mobile-filter-toggle"
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+            >
+              <svg className="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+              </svg>
+              Filters
+            </button>
+          </div>
           <div className="stats-grid">
             <div className="stat-card total">
               <div className="stat-number">{stats.total}</div>
@@ -171,7 +202,6 @@ const Problems = () => {
       </div>
 
       <div className="problems-content">
-
         <div className={`filters-sidebar ${showMobileFilters ? 'mobile-open' : ''}`}>
           <div className="sidebar-header">
             <h3>Filters</h3>
@@ -349,8 +379,11 @@ const Problems = () => {
                       </div>
                     </td>
                     <td className="solution-cell">
-                      {problem.solutionArticle && (
-                        <button className="solution-btn">
+                      {problem.hasSolution && (
+                        <button 
+                          onClick={() => handleViewSolution(problem)}
+                          className="solution-btn"
+                        >
                           <svg className="solution-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                           </svg>
@@ -434,6 +467,19 @@ const Problems = () => {
         </div>
       </div>
 
+      {/* Solution View Modal */}
+      {showSolutionModal && selectedProblem && solutions[selectedProblem._id] && (
+        <SolutionViewModal
+          problem={selectedProblem}
+          solution={solutions[selectedProblem._id]}
+          onClose={() => {
+            setShowSolutionModal(false);
+            setSelectedProblem(null);
+          }}
+        />
+      )}
+
+      {/* Mobile Filter Overlay */}
       {showMobileFilters && (
         <div 
           className="mobile-filter-overlay"

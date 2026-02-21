@@ -1,105 +1,89 @@
 const mongoose = require('mongoose');
 
+const additionalResourceSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  url: {
+    type: String,
+    required: true
+  },
+  type: {
+    type: String,
+    enum: ['article', 'video', 'documentation', 'github'],
+    default: 'article'
+  }
+});
+
 const solutionSchema = new mongoose.Schema({
   problemId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Problem',
-    required: true
-  },
-  title: {
-    type: String,
     required: true,
-    trim: true
+    unique: true
   },
-  description: {
+  problemTitle: {
     type: String,
     required: true
   },
-  approach: {
+  // Text solution (markdown supported)
+  textSolution: {
     type: String,
-    required: true
+    default: ''
   },
-  complexity: {
-    time: {
+  // Video solution
+  videoSolution: {
+    url: {
       type: String,
-      required: true
+      default: ''
     },
-    space: {
+    title: {
       type: String,
-      required: true
+      default: ''
+    },
+    platform: {
+      type: String,
+      enum: ['youtube', 'vimeo', 'custom'],
+      default: 'youtube'
+    },
+    duration: {
+      type: String,
+      default: ''
+    },
+    thumbnail: {
+      type: String,
+      default: ''
     }
   },
-  code: [{
-    language: {
-      type: String,
-      required: true,
-      enum: ['javascript', 'python', 'java', 'cpp', 'c']
-    },
-    code: {
-      type: String,
-      required: true
-    }
-  }],
-  explanation: {
-    type: String,
-    required: true
+  // Additional resources
+  additionalResources: [additionalResourceSchema],
+  // Publish status
+  isPublished: {
+    type: Boolean,
+    default: true
   },
-  examples: [{
-    input: String,
-    output: String,
-    explanation: String
-  }],
-  tags: [{
-    type: String,
-    trim: true
-  }],
-  youtubeUrl: {
-    type: String,
-    trim: true
+  // Version tracking
+  version: {
+    type: Number,
+    default: 1
   },
-  author: {
+  createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  isApproved: {
-    type: Boolean,
-    default: false
-  },
-  upvotes: [{
+  updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }],
-  downvotes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }],
-  views: {
-    type: Number,
-    default: 0
   }
 }, {
   timestamps: true
 });
 
-// Index for better query performance
-solutionSchema.index({ problemId: 1, createdAt: -1 });
-solutionSchema.index({ author: 1 });
-solutionSchema.index({ tags: 1 });
-solutionSchema.index({ isApproved: 1 });
-
-// Virtual for vote count
-solutionSchema.virtual('voteCount').get(function() {
-  return this.upvotes.length - this.downvotes.length;
-});
-
-// Method to check if user has voted
-solutionSchema.methods.hasUpvoted = function(userId) {
-  return this.upvotes.includes(userId);
-};
-
-solutionSchema.methods.hasDownvoted = function(userId) {
-  return this.downvotes.includes(userId);
-};
+// Index for faster queries
+solutionSchema.index({ problemId: 1 });
+solutionSchema.index({ isPublished: 1 });
+solutionSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('Solution', solutionSchema);

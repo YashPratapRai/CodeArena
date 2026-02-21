@@ -70,12 +70,20 @@ const problemSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  hasSolution: {
+    type: Boolean,
+    default: false
+  },
+  solutionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Solution'
   }
+
 }, {
   timestamps: true
 });
 
-// Update acceptance rate before saving
 problemSchema.pre('save', function(next) {
   if (this.totalSubmissions > 0) {
     this.acceptanceRate = (this.correctSubmissions / this.totalSubmissions) * 100;

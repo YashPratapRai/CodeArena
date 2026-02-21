@@ -17,8 +17,11 @@ const problemService = {
   },
 
   getProblem: (id) => api.get(`/api/problems/${id}`),
+  
   createProblem: (problemData) => api.post('/api/problems', problemData),
+  
   updateProblem: (id, problemData) => api.put(`/api/problems/${id}`, problemData),
+  
   deleteProblem: (id) => api.delete(`/api/problems/${id}`),
 
   getStats: () => api.get('/api/problems/stats'),
@@ -35,6 +38,30 @@ const problemService = {
   getRandomProblem: (difficulty) => {
     const params = difficulty ? `?difficulty=${difficulty}` : '';
     return api.get(`/api/problems/random${params}`);
+  },
+
+  // Get solution for a problem
+  getSolution: async (problemId) => {
+    const response = await api.get(`/api/problems/${problemId}/solution`); // Added /api/
+    return response.data;
+  },
+
+  // Create or update solution
+  saveSolution: async (problemId, solutionData) => {
+    const response = await api.post(`/api/problems/${problemId}/solution`, solutionData); // Added /api/
+    return response.data;
+  },
+
+  // Delete solution
+  deleteSolution: async (problemId) => {
+    const response = await api.delete(`/api/problems/${problemId}/solution`); // Added /api/
+    return response.data;
+  },
+
+  // Toggle solution publish status
+  toggleSolutionStatus: async (problemId) => {
+    const response = await api.patch(`/api/problems/${problemId}/solution/toggle`); // Added /api/
+    return response.data;
   }
 };
 

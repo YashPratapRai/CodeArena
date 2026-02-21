@@ -12,8 +12,9 @@ const getProblems = async (req, res, next) => {
     if (difficulty) filter.difficulty = difficulty;
     if (tags) filter.tags = { $in: tags.split(',') };
 
+    // ✅ ADDED: Include hasSolution and solutionId in the select
     const problems = await Problem.find(filter)
-      .select('title difficulty tags acceptanceRate totalSubmissions')
+      .select('title difficulty tags acceptanceRate totalSubmissions hasSolution solutionId')
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .sort({ createdAt: -1 });
@@ -37,7 +38,9 @@ const getProblems = async (req, res, next) => {
 // @access  Public
 const getProblem = async (req, res, next) => {
   try {
-    const problem = await Problem.findById(req.params.id);
+    // ✅ ADDED: Include hasSolution and solutionId in the select
+    const problem = await Problem.findById(req.params.id)
+      .select('title description difficulty tags constraints examples testCases initialCode hints acceptanceRate totalSubmissions hasSolution solutionId');
 
     if (!problem) {
       return res.status(404).json({
@@ -143,8 +146,9 @@ const getProblemsByTag = async (req, res, next) => {
     
     if (difficulty) filter.difficulty = difficulty;
 
+    // ✅ ADDED: Include hasSolution and solutionId in the select
     const problems = await Problem.find(filter)
-      .select('title difficulty tags acceptanceRate totalSubmissions')
+      .select('title difficulty tags acceptanceRate totalSubmissions hasSolution solutionId')
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .sort({ createdAt: -1 });
@@ -176,8 +180,9 @@ const getRandomProblem = async (req, res, next) => {
     const count = await Problem.countDocuments(filter);
     const random = Math.floor(Math.random() * count);
     
+    // ✅ ADDED: Include hasSolution in select
     const problem = await Problem.findOne(filter)
-      .select('_id title difficulty')
+      .select('_id title difficulty hasSolution')
       .skip(random);
 
     if (!problem) {
